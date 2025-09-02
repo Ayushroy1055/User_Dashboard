@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Dashboard from "./dashboard";
+import UserList from "./userlist";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios.get("https://6874ce63dd06792b9c954fc7.mockapi.io/api/v1/users")
+      .then(res => setUsers(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <Router>
+      <h1>User Dashboard</h1>
+      <Routes>
+        <Route path="/" element={<Dashboard users={users} />} />
+        <Route path="/userlist" element={<UserList users={users} />} />
+      </Routes>
+    </Router>
   );
 }
 
